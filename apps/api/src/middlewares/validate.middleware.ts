@@ -6,7 +6,13 @@ type RequestTarget = "body" | "query" | "params";
 export function validate(schema: AnyZodObject, target: RequestTarget = "body") {
   return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
     try {
-      req[target] = await schema.parseAsync(req[target]);
+      const parsed = await schema.parseAsync(req[target]);
+      Object.defineProperty(req, target, {
+        value: parsed,
+        writable: true,
+        configurable: true,
+        enumerable: true,
+      });
       next();
     } catch (error) {
       if (error instanceof ZodError) {

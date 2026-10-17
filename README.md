@@ -127,8 +127,9 @@ The seed script (`pnpm db:seed`) provides pre-configured user accounts:
 
 ---
 
-## 📡 API Authentication Endpoints
+## 📡 API Endpoints
 
+### Authentication (`/api/auth`)
 | Method | Endpoint | Access | Description |
 | :--- | :--- | :--- | :--- |
 | `GET` | `/health` | Public | API health check status |
@@ -136,6 +137,15 @@ The seed script (`pnpm db:seed`) provides pre-configured user accounts:
 | `POST` | `/api/auth/login` | Public | Authenticate user & receive Bearer JWT |
 | `GET` | `/api/auth/me` | Protected | Retrieve authenticated user profile |
 | `POST` | `/api/auth/logout` | Protected | Invalidate user session |
+
+### Parties (`/api/parties`)
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/parties` | Protected | List parties with pagination, search & type filter |
+| `GET` | `/api/parties/:id` | Protected | Get party details with transaction counts |
+| `POST` | `/api/parties` | Protected | Create new party (Vendor, Client, or Both) |
+| `PUT` | `/api/parties/:id` | Protected | Update existing party information |
+| `DELETE` | `/api/parties/:id` | Protected | Delete party (guarded if transactions exist) |
 
 ---
 

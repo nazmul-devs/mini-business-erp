@@ -3,6 +3,7 @@ import cors from "cors";
 import { env } from "./config";
 import { errorHandler, notFound } from "./middlewares";
 import { authRouter } from "./modules/auth";
+import { partyRouter } from "./modules/parties";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/parties", partyRouter);
 
 app.use(notFound);
 app.use(errorHandler);
