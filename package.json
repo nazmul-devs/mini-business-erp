@@ -1,0 +1,19 @@
+{
+  "name": "mini-business-erp",
+  "private": true,
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "db:generate": "pnpm --filter @erp/database db:generate",
+    "db:migrate": "pnpm --filter @erp/database db:migrate",
+    "db:studio": "pnpm --filter @erp/database db:studio"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0",
+    "typescript": "^5.8.0"
+  }
+}
