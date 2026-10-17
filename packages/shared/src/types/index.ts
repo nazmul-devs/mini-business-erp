@@ -1,6 +1,7 @@
 export type DocumentStatus = "DRAFT" | "COMPLETED" | "CANCELLED";
 export type PaymentStatus = "UNPAID" | "PARTIAL" | "PAID";
 export type PartyType = "VENDOR" | "CLIENT" | "BOTH";
+export type StockMovementType = "PURCHASE_IN" | "SALE_OUT" | "ADJUSTMENT_IN" | "ADJUSTMENT_OUT";
 
 export interface AuthUser {
   id: string;
@@ -30,6 +31,39 @@ export interface PartyItem {
   openingBalance: number | string;
   createdAt: Date | string;
   updatedAt: Date | string;
+}
+
+export interface StockMovementItem {
+  id: string;
+  productId: string;
+  type: StockMovementType;
+  quantity: number | string;
+  referenceType: string;
+  referenceId: string;
+  note: string | null;
+  createdAt: Date | string;
+  product?: {
+    id: string;
+    name: string;
+    sku: string;
+    unit: string;
+  };
+}
+
+export interface ProductItem {
+  id: string;
+  name: string;
+  sku: string;
+  unit: string;
+  purchasePrice: number | string;
+  sellingPrice: number | string;
+  currentStock: number | string;
+  lowStockAt: number | string;
+  isActive: boolean;
+  isLowStock?: boolean;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  stockMovements?: StockMovementItem[];
 }
 
 export interface PaginatedResult<T> {

@@ -25,8 +25,10 @@ mini-business-erp/
 │   │   │   ├── config/           # Validated environment configuration
 │   │   │   ├── middlewares/      # auth, validate, error, and notFound middlewares
 │   │   │   ├── modules/          # Layered modules (routes, controller, service, repo)
-│   │   │   │   └── auth/         # Complete Authentication module & unit tests
-│   │   │   └── shared/errors/    # AppError operational error handler
+│   │   │   │   ├── auth/         # Complete Authentication module
+│   │   │   │   ├── parties/      # Parties module (Vendors & Clients)
+│   │   │   │   ├── products/     # Products & Stock Movements module
+│   │   │   │   └── inventory/    # Global inventory tracking & low stock endpoints
 │   │   └── package.json
 │   │
 │   └── web/                      # Frontend (Next.js 15 App Router)
@@ -146,6 +148,23 @@ The seed script (`pnpm db:seed`) provides pre-configured user accounts:
 | `POST` | `/api/parties` | Protected | Create new party (Vendor, Client, or Both) |
 | `PUT` | `/api/parties/:id` | Protected | Update existing party information |
 | `DELETE` | `/api/parties/:id` | Protected | Delete party (guarded if transactions exist) |
+
+### Products (`/api/products`)
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/products` | Protected | List products with pagination, search, status, and `lowStock=true` filter |
+| `GET` | `/api/products/:id` | Protected | Get product details with recent stock movements & relation counts |
+| `POST` | `/api/products` | Protected | Create new product (auto-creates `INITIAL_STOCK` movement if stock > 0) |
+| `PUT` | `/api/products/:id` | Protected | Update product attributes (SKU uniqueness validated) |
+| `DELETE` | `/api/products/:id` | Protected | Delete product (guarded against active sales/purchases; cascades movements) |
+| `GET` | `/api/products/:id/movements` | Protected | Paginated stock movement audit trail for a specific product |
+| `POST` | `/api/products/:id/adjust-stock` | Protected | Adjust stock (`ADJUSTMENT_IN` / `ADJUSTMENT_OUT`) in an atomic transaction |
+
+### Inventory & Stock Movements (`/api/inventory`)
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/inventory/movements` | Protected | Global paginated stock movement audit log with product details |
+| `GET` | `/api/inventory/low-stock` | Protected | List products where current stock is at or below `lowStockAt` threshold |
 
 ---
 
