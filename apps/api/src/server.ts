@@ -1,16 +1,25 @@
-import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import { env } from "./config";
+import { errorHandler, notFound } from "./middlewares";
+import { authRouter } from "./modules/auth";
 
 const app = express();
-app.use(cors({ origin: process.env.API_ALLOWED_ORIGIN ?? "http://localhost:3000" }));
+
+app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", service: "mini-business-erp-api" });
 });
 
-const port = Number(process.env.API_PORT ?? 4000);
-app.listen(port, () => {
-  console.log(`API listening on http://localhost:${port}`);
+app.use("/api/auth", authRouter);
+
+app.use(notFound);
+app.use(errorHandler);
+
+app.listen(env.PORT, "0.0.0.0", () => {
+  console.log(`API listening on http://localhost:${env.PORT}`);
 });
+
+export default app;
