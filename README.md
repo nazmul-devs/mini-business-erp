@@ -24,6 +24,7 @@ A focused full-stack assessment project for managing parties (vendors/clients), 
 4. Run `pnpm install`.
 5. Generate Prisma client: `pnpm db:generate`.
 6. Run migrations: `pnpm db:migrate`.
-7. Start apps: `pnpm dev`.
+7. Seed initial database data: `pnpm db:seed`.
+8. Start apps: `pnpm dev`.
 
 This is a scaffold only; implement the modules and business logic yourself. Keep secrets out of Git.
