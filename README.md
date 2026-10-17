@@ -6,7 +6,7 @@ A focused full-stack assessment project for managing parties (vendors/clients), 
 - Monorepo: pnpm workspaces + Turborepo
 - Web: Next.js + TypeScript + Tailwind CSS
 - API: Node.js + Express + TypeScript
-- Database: PostgreSQL + Prisma
+- Database & Cache: PostgreSQL + Redis + Prisma
 - Validation/shared types: Zod
 - Tests: Vitest (or Jest)
 
@@ -20,9 +20,10 @@ A focused full-stack assessment project for managing parties (vendors/clients), 
 ## Setup
 1. Install Node.js LTS and pnpm.
 2. Copy `.env.example` to `.env` and fill in values.
-3. Run `pnpm install`.
-4. Generate Prisma client: `pnpm db:generate`.
-5. Run migrations: `pnpm db:migrate`.
-6. Start apps: `pnpm dev`.
+3. Start database and cache services: `pnpm docker:up` (or `docker compose up -d`).
+4. Run `pnpm install`.
+5. Generate Prisma client: `pnpm db:generate`.
+6. Run migrations: `pnpm db:migrate`.
+7. Start apps: `pnpm dev`.
 
 This is a scaffold only; implement the modules and business logic yourself. Keep secrets out of Git.

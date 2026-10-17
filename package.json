@@ -8,6 +8,9 @@
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
     "db:generate": "pnpm --filter @erp/database db:generate",
     "db:migrate": "pnpm --filter @erp/database db:migrate",
     "db:studio": "pnpm --filter @erp/database db:studio"
@@ -15,5 +18,13 @@
   "devDependencies": {
     "turbo": "^2.5.0",
     "typescript": "^5.8.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "prisma"
+    ]
   }
 }
