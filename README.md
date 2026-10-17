@@ -28,6 +28,7 @@ mini-business-erp/
 │   │   │   │   ├── auth/         # Complete Authentication module
 │   │   │   │   ├── parties/      # Parties module (Vendors & Clients)
 │   │   │   │   ├── products/     # Products & Stock Movements module
+│   │   │   │   ├── purchases/    # Purchases, lines & inventory receipt transactions
 │   │   │   │   └── inventory/    # Global inventory tracking & low stock endpoints
 │   │   └── package.json
 │   │
@@ -159,6 +160,15 @@ The seed script (`pnpm db:seed`) provides pre-configured user accounts:
 | `DELETE` | `/api/products/:id` | Protected | Delete product (guarded against active sales/purchases; cascades movements) |
 | `GET` | `/api/products/:id/movements` | Protected | Paginated stock movement audit trail for a specific product |
 | `POST` | `/api/products/:id/adjust-stock` | Protected | Adjust stock (`ADJUSTMENT_IN` / `ADJUSTMENT_OUT`) in an atomic transaction |
+
+### Purchases (`/api/purchases`)
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/purchases` | Protected | List purchases with pagination, search, status, partyId & date filters |
+| `GET` | `/api/purchases/:id` | Protected | Get purchase details with vendor, item breakdown & product details |
+| `POST` | `/api/purchases` | Protected | Create purchase (atomic transaction: stock receipt + `PURCHASE_IN` movement if COMPLETED) |
+| `PUT` | `/api/purchases/:id` | Protected | Update purchase (handles DRAFT->COMPLETED stock intake, COMPLETED->CANCELLED reversal) |
+| `DELETE` | `/api/purchases/:id` | Protected | Delete purchase (allowed for DRAFT or CANCELLED; guards COMPLETED orders) |
 
 ### Inventory & Stock Movements (`/api/inventory`)
 | Method | Endpoint | Access | Description |

@@ -6,6 +6,7 @@ import { authRouter } from "./modules/auth";
 import { partyRouter } from "./modules/parties";
 import { productRouter } from "./modules/products";
 import { inventoryRouter } from "./modules/inventory";
+import { purchaseRouter } from "./modules/purchases";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/parties", partyRouter);
 app.use("/api/products", productRouter);
 app.use("/api/inventory", inventoryRouter);
+app.use("/api/purchases", purchaseRouter);
 
 app.use(notFound);
 app.use(errorHandler);

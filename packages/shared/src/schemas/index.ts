@@ -55,6 +55,44 @@ export const stockAdjustmentSchema = z.object({
   note: z.string().trim().max(300).optional(),
 });
 
+export const purchaseItemInputSchema = z.object({
+  productId: z.string().min(1, "Product is required"),
+  quantity: z.coerce.number().positive("Quantity must be greater than zero"),
+  unitCost: z.coerce.number().min(0, "Unit cost must be zero or positive"),
+});
+
+export const createPurchaseSchema = z.object({
+  purchaseNo: z.string().trim().max(50).optional(),
+  partyId: z.string().min(1, "Party is required"),
+  date: z.coerce.date().optional(),
+  status: z.enum(["DRAFT", "COMPLETED"]).optional().default("COMPLETED"),
+  discount: z.coerce.number().min(0, "Discount cannot be negative").optional().default(0),
+  paidAmount: z.coerce.number().min(0, "Paid amount cannot be negative").optional().default(0),
+  notes: z.string().trim().max(500).optional().or(z.literal("")),
+  items: z.array(purchaseItemInputSchema).min(1, "At least one item is required in a purchase"),
+});
+
+export const updatePurchaseSchema = z.object({
+  partyId: z.string().min(1).optional(),
+  date: z.coerce.date().optional(),
+  status: z.enum(["DRAFT", "COMPLETED", "CANCELLED"]).optional(),
+  discount: z.coerce.number().min(0).optional(),
+  paidAmount: z.coerce.number().min(0).optional(),
+  notes: z.string().trim().max(500).optional().or(z.literal("")),
+  items: z.array(purchaseItemInputSchema).min(1).optional(),
+});
+
+export const purchaseQuerySchema = z.object({
+  search: z.string().optional(),
+  partyId: z.string().optional(),
+  status: z.enum(["DRAFT", "COMPLETED", "CANCELLED"]).optional(),
+  paymentStatus: z.enum(["UNPAID", "PARTIAL", "PAID"]).optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+
 export const invoiceItemSchema = z.object({
   productId: z.string().min(1),
   quantity: z.number().positive(),
@@ -79,12 +117,16 @@ export const registerSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-export type CreatePartyInput = z.infer<typeof createPartySchema>;
-export type UpdatePartyInput = z.infer<typeof updatePartySchema>;
-export type PartyQueryInput = z.infer<typeof partyQuerySchema>;
-export type CreateProductInput = z.infer<typeof createProductSchema>;
-export type UpdateProductInput = z.infer<typeof updateProductSchema>;
-export type ProductQueryInput = z.infer<typeof productQuerySchema>;
-export type StockAdjustmentInput = z.infer<typeof stockAdjustmentSchema>;
-export type LoginInput = z.infer<typeof loginSchema>;
-export type RegisterInput = z.infer<typeof registerSchema>;
+export type CreatePartyInput = z.input<typeof createPartySchema>;
+export type UpdatePartyInput = z.input<typeof updatePartySchema>;
+export type PartyQueryInput = z.input<typeof partyQuerySchema>;
+export type CreateProductInput = z.input<typeof createProductSchema>;
+export type UpdateProductInput = z.input<typeof updateProductSchema>;
+export type ProductQueryInput = z.input<typeof productQuerySchema>;
+export type StockAdjustmentInput = z.input<typeof stockAdjustmentSchema>;
+export type PurchaseItemInput = z.input<typeof purchaseItemInputSchema>;
+export type CreatePurchaseInput = z.input<typeof createPurchaseSchema>;
+export type UpdatePurchaseInput = z.input<typeof updatePurchaseSchema>;
+export type PurchaseQueryInput = z.input<typeof purchaseQuerySchema>;
+export type LoginInput = z.input<typeof loginSchema>;
+export type RegisterInput = z.input<typeof registerSchema>;

@@ -66,6 +66,48 @@ export interface ProductItem {
   stockMovements?: StockMovementItem[];
 }
 
+export interface PurchaseItemDetail {
+  id: string;
+  purchaseId: string;
+  productId: string;
+  quantity: number;
+  unitCost: number;
+  lineTotal: number;
+  product?: {
+    id: string;
+    name: string;
+    sku: string;
+    unit: string;
+  };
+}
+
+export interface PurchaseRecord {
+  id: string;
+  purchaseNo: string;
+  partyId: string;
+  party?: {
+    id: string;
+    name: string;
+    type: PartyType;
+    email?: string | null;
+    phone?: string | null;
+  };
+  date: Date | string;
+  status: DocumentStatus;
+  paymentStatus: PaymentStatus;
+  subtotal: number;
+  discount: number;
+  total: number;
+  paidAmount: number;
+  notes: string | null;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  items?: PurchaseItemDetail[];
+  _count?: {
+    items: number;
+  };
+}
+
 export interface PaginatedResult<T> {
   items: T[];
   total: number;
