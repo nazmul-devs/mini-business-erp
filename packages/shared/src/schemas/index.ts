@@ -133,6 +133,31 @@ export const saleQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
 });
 
+export const createExpenseSchema = z.object({
+  title: z.string().trim().min(1, "Title is required").max(150),
+  category: z.string().trim().min(1, "Category is required").max(100),
+  amount: z.coerce.number().positive("Amount must be greater than zero"),
+  date: z.coerce.date().optional(),
+  description: z.string().trim().max(500).optional().or(z.literal("")),
+});
+
+export const updateExpenseSchema = z.object({
+  title: z.string().trim().min(1).max(150).optional(),
+  category: z.string().trim().min(1).max(100).optional(),
+  amount: z.coerce.number().positive().optional(),
+  date: z.coerce.date().optional(),
+  description: z.string().trim().max(500).optional().or(z.literal("")),
+});
+
+export const expenseQuerySchema = z.object({
+  search: z.string().optional(),
+  category: z.string().optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+
 export const loginSchema = z.object({
   email: z.string().trim().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -159,5 +184,8 @@ export type SaleItemInput = z.input<typeof saleItemInputSchema>;
 export type CreateSaleInput = z.input<typeof createSaleSchema>;
 export type UpdateSaleInput = z.input<typeof updateSaleSchema>;
 export type SaleQueryInput = z.input<typeof saleQuerySchema>;
+export type CreateExpenseInput = z.input<typeof createExpenseSchema>;
+export type UpdateExpenseInput = z.input<typeof updateExpenseSchema>;
+export type ExpenseQueryInput = z.input<typeof expenseQuerySchema>;
 export type LoginInput = z.input<typeof loginSchema>;
 export type RegisterInput = z.input<typeof registerSchema>;

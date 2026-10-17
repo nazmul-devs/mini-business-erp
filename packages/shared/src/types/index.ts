@@ -152,6 +152,23 @@ export interface SaleRecord {
   };
 }
 
+export interface ExpenseItem {
+  id: string;
+  title: string;
+  category: string;
+  amount: number;
+  date: Date | string;
+  description: string | null;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+}
+
+export interface ExpenseCategorySummary {
+  category: string;
+  totalAmount: number;
+  count: number;
+}
+
 export interface PaginatedResult<T> {
   items: T[];
   total: number;

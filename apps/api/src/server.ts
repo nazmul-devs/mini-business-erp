@@ -8,6 +8,7 @@ import { productRouter } from "./modules/products";
 import { inventoryRouter } from "./modules/inventory";
 import { purchaseRouter } from "./modules/purchases";
 import { saleRouter } from "./modules/sales";
+import { expenseRouter } from "./modules/expenses";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/api/products", productRouter);
 app.use("/api/inventory", inventoryRouter);
 app.use("/api/purchases", purchaseRouter);
 app.use("/api/sales", saleRouter);
+app.use("/api/expenses", expenseRouter);
 
 app.use(notFound);
 app.use(errorHandler);

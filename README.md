@@ -30,6 +30,7 @@ mini-business-erp/
 │   │   │   │   ├── products/     # Products & Stock Movements module
 │   │   │   │   ├── purchases/    # Purchases, lines & inventory receipt transactions
 │   │   │   │   ├── sales/        # Sales invoices, stock decrement & COGS snapshot
+│   │   │   │   ├── expenses/     # Operating expenses, category queries & summaries
 │   │   │   │   └── inventory/    # Global inventory tracking & low stock endpoints
 │   │   └── package.json
 │   │
@@ -179,6 +180,17 @@ The seed script (`pnpm db:seed`) provides pre-configured user accounts:
 | `POST` | `/api/sales` | Protected | Create sale (atomic transaction: stock decrement + `SALE_OUT` movement + COGS snapshot) |
 | `PUT` | `/api/sales/:id` | Protected | Update sale (handles DRAFT->COMPLETED stock deduction, COMPLETED->CANCELLED reversal) |
 | `DELETE` | `/api/sales/:id` | Protected | Delete sale (allowed for DRAFT or CANCELLED; guards COMPLETED invoices) |
+
+### Expenses (`/api/expenses`)
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/expenses` | Protected | List operating expenses with pagination, search, category & date filters |
+| `GET` | `/api/expenses/categories` | Protected | Get list of distinct expense categories |
+| `GET` | `/api/expenses/summary` | Protected | Aggregated category spending summary with totals and counts |
+| `GET` | `/api/expenses/:id` | Protected | Get single expense details |
+| `POST` | `/api/expenses` | Protected | Record a new operating expense |
+| `PUT` | `/api/expenses/:id` | Protected | Update existing expense details |
+| `DELETE` | `/api/expenses/:id` | Protected | Delete expense record |
 
 ### Inventory & Stock Movements (`/api/inventory`)
 | Method | Endpoint | Access | Description |
