@@ -42,36 +42,38 @@ model User {
 }
 
 model Party {
-  id        String    @id @default(cuid())
-  name      String
-  type      PartyType
-  email     String?
-  phone     String?
-  address   String?
-  openingBalance Decimal @default(0) @db.Decimal(12, 2)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  purchases Purchase[]
-  sales     Sale[]
+  id             String     @id @default(cuid())
+  name           String
+  type           PartyType
+  email          String?
+  phone          String?
+  address        String?
+  openingBalance Decimal    @default(0) @db.Decimal(12, 2)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  purchases      Purchase[]
+  sales          Sale[]
+
   @@index([name])
   @@index([type])
 }
 
 model Product {
-  id             String   @id @default(cuid())
+  id             String          @id @default(cuid())
   name           String
-  sku            String   @unique
-  unit           String   @default("pcs")
-  purchasePrice  Decimal  @default(0) @db.Decimal(12, 2)
-  sellingPrice   Decimal  @default(0) @db.Decimal(12, 2)
-  currentStock   Decimal  @default(0) @db.Decimal(12, 3)
-  lowStockAt     Decimal  @default(0) @db.Decimal(12, 3)
-  isActive       Boolean  @default(true)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  sku            String          @unique
+  unit           String          @default("pcs")
+  purchasePrice  Decimal         @default(0) @db.Decimal(12, 2)
+  sellingPrice   Decimal         @default(0) @db.Decimal(12, 2)
+  currentStock   Decimal         @default(0) @db.Decimal(12, 3)
+  lowStockAt     Decimal         @default(0) @db.Decimal(12, 3)
+  isActive       Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   purchaseItems  PurchaseItem[]
   saleItems      SaleItem[]
   stockMovements StockMovement[]
+
   @@index([name])
 }
 
@@ -91,19 +93,20 @@ model Purchase {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   items         PurchaseItem[]
+
   @@index([partyId, date])
   @@index([status])
 }
 
 model PurchaseItem {
-  id          String   @id @default(cuid())
-  purchaseId  String
-  purchase    Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
-  productId   String
-  product     Product  @relation(fields: [productId], references: [id])
-  quantity    Decimal  @db.Decimal(12, 3)
-  unitCost    Decimal  @db.Decimal(12, 2)
-  lineTotal   Decimal  @db.Decimal(12, 2)
+  id         String   @id @default(cuid())
+  purchaseId String
+  purchase   Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  quantity   Decimal  @db.Decimal(12, 3)
+  unitCost   Decimal  @db.Decimal(12, 2)
+  lineTotal  Decimal  @db.Decimal(12, 2)
 }
 
 model Sale {
@@ -122,20 +125,21 @@ model Sale {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   items         SaleItem[]
+
   @@index([partyId, date])
   @@index([status])
 }
 
 model SaleItem {
-  id        String  @id @default(cuid())
-  saleId    String
-  sale      Sale   @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Decimal @db.Decimal(12, 3)
-  unitPrice Decimal @db.Decimal(12, 2)
+  id             String  @id @default(cuid())
+  saleId         String
+  sale           Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  productId      String
+  product        Product @relation(fields: [productId], references: [id])
+  quantity       Decimal @db.Decimal(12, 3)
+  unitPrice      Decimal @db.Decimal(12, 2)
   unitCostAtSale Decimal @db.Decimal(12, 2)
-  lineTotal Decimal @db.Decimal(12, 2)
+  lineTotal      Decimal @db.Decimal(12, 2)
 }
 
 model Expense {
@@ -147,19 +151,45 @@ model Expense {
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
   @@index([date, category])
 }
 
 model StockMovement {
-  id        String            @id @default(cuid())
-  productId String
-  product   Product           @relation(fields: [productId], references: [id])
-  type      StockMovementType
-  quantity  Decimal           @db.Decimal(12, 3)
+  id            String            @id @default(cuid())
+  productId     String
+  product       Product           @relation(fields: [productId], references: [id])
+  type          StockMovementType
+  quantity      Decimal           @db.Decimal(12, 3)
   referenceType String
   referenceId   String
-  note      String?
-  createdAt DateTime          @default(now())
+  note          String?
+  createdAt     DateTime          @default(now())
+
   @@index([productId, createdAt])
   @@index([referenceType, referenceId])
+}
+
+model BusinessProfile {
+  id             String   @id @default(cuid())
+  companyName    String
+  legalName      String?
+  logoUrl        String?
+  email          String?
+  mobile         String?
+  phone          String?
+  website        String?
+  address        String?
+  city           String?
+  state          String?
+  postalCode     String?
+  country        String   @default("Bangladesh")
+  taxNumber      String?
+  tradeLicenseNo String?
+  currency       String   @default("BDT")
+  invoicePrefix  String   @default("INV")
+  purchasePrefix String   @default("PUR")
+  invoiceFooter  String?
+  updatedAt      DateTime @updatedAt
+  createdAt      DateTime @default(now())
 }
