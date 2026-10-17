@@ -93,17 +93,44 @@ export const purchaseQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
 });
 
-export const invoiceItemSchema = z.object({
-  productId: z.string().min(1),
-  quantity: z.number().positive(),
-  unitPrice: z.number().nonnegative(),
+export const saleItemInputSchema = z.object({
+  productId: z.string().min(1, "Product is required"),
+  quantity: z.coerce.number().positive("Quantity must be greater than zero"),
+  unitPrice: z.coerce.number().min(0, "Unit price must be zero or positive").optional(),
 });
 
+export const invoiceItemSchema = saleItemInputSchema;
+
 export const createSaleSchema = z.object({
-  partyId: z.string().min(1),
+  invoiceNo: z.string().trim().max(50).optional(),
+  partyId: z.string().min(1, "Party (client) is required"),
   date: z.coerce.date().optional(),
-  discount: z.number().nonnegative().default(0),
-  items: z.array(invoiceItemSchema).min(1),
+  status: z.enum(["DRAFT", "COMPLETED"]).optional().default("COMPLETED"),
+  discount: z.coerce.number().min(0, "Discount cannot be negative").optional().default(0),
+  paidAmount: z.coerce.number().min(0, "Paid amount cannot be negative").optional().default(0),
+  notes: z.string().trim().max(500).optional().or(z.literal("")),
+  items: z.array(saleItemInputSchema).min(1, "At least one item is required in a sale"),
+});
+
+export const updateSaleSchema = z.object({
+  partyId: z.string().min(1).optional(),
+  date: z.coerce.date().optional(),
+  status: z.enum(["DRAFT", "COMPLETED", "CANCELLED"]).optional(),
+  discount: z.coerce.number().min(0).optional(),
+  paidAmount: z.coerce.number().min(0).optional(),
+  notes: z.string().trim().max(500).optional().or(z.literal("")),
+  items: z.array(saleItemInputSchema).min(1).optional(),
+});
+
+export const saleQuerySchema = z.object({
+  search: z.string().optional(),
+  partyId: z.string().optional(),
+  status: z.enum(["DRAFT", "COMPLETED", "CANCELLED"]).optional(),
+  paymentStatus: z.enum(["UNPAID", "PARTIAL", "PAID"]).optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
 });
 
 export const loginSchema = z.object({
@@ -128,5 +155,9 @@ export type PurchaseItemInput = z.input<typeof purchaseItemInputSchema>;
 export type CreatePurchaseInput = z.input<typeof createPurchaseSchema>;
 export type UpdatePurchaseInput = z.input<typeof updatePurchaseSchema>;
 export type PurchaseQueryInput = z.input<typeof purchaseQuerySchema>;
+export type SaleItemInput = z.input<typeof saleItemInputSchema>;
+export type CreateSaleInput = z.input<typeof createSaleSchema>;
+export type UpdateSaleInput = z.input<typeof updateSaleSchema>;
+export type SaleQueryInput = z.input<typeof saleQuerySchema>;
 export type LoginInput = z.input<typeof loginSchema>;
 export type RegisterInput = z.input<typeof registerSchema>;

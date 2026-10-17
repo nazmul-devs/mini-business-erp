@@ -29,6 +29,7 @@ mini-business-erp/
 │   │   │   │   ├── parties/      # Parties module (Vendors & Clients)
 │   │   │   │   ├── products/     # Products & Stock Movements module
 │   │   │   │   ├── purchases/    # Purchases, lines & inventory receipt transactions
+│   │   │   │   ├── sales/        # Sales invoices, stock decrement & COGS snapshot
 │   │   │   │   └── inventory/    # Global inventory tracking & low stock endpoints
 │   │   └── package.json
 │   │
@@ -169,6 +170,15 @@ The seed script (`pnpm db:seed`) provides pre-configured user accounts:
 | `POST` | `/api/purchases` | Protected | Create purchase (atomic transaction: stock receipt + `PURCHASE_IN` movement if COMPLETED) |
 | `PUT` | `/api/purchases/:id` | Protected | Update purchase (handles DRAFT->COMPLETED stock intake, COMPLETED->CANCELLED reversal) |
 | `DELETE` | `/api/purchases/:id` | Protected | Delete purchase (allowed for DRAFT or CANCELLED; guards COMPLETED orders) |
+
+### Sales (`/api/sales`)
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/sales` | Protected | List sales invoices with pagination, search, status, partyId & date filters |
+| `GET` | `/api/sales/:id` | Protected | Get sale invoice details with client breakdown & `unitCostAtSale` snapshots |
+| `POST` | `/api/sales` | Protected | Create sale (atomic transaction: stock decrement + `SALE_OUT` movement + COGS snapshot) |
+| `PUT` | `/api/sales/:id` | Protected | Update sale (handles DRAFT->COMPLETED stock deduction, COMPLETED->CANCELLED reversal) |
+| `DELETE` | `/api/sales/:id` | Protected | Delete sale (allowed for DRAFT or CANCELLED; guards COMPLETED invoices) |
 
 ### Inventory & Stock Movements (`/api/inventory`)
 | Method | Endpoint | Access | Description |
